@@ -1,15 +1,4 @@
 # e-commerece-interface
-# Project Title
-
-Short project description here.
-
-## About
-
-Briefly describe your project here. Mention its purpose, main features, and any relevant details.
-
-## Getting Started
-
-These instructions will get you a copy of the project up and running on your local machine for development and testing purposes.
 
 ### Prerequisites
 
