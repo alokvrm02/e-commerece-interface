@@ -42,7 +42,7 @@ CREATE TABLE `product_relevancy` (
   UNIQUE KEY `product_id_UNIQUE` (`product_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
 
-```bash
+
 CREATE TABLE `products` (
   `id` int NOT NULL AUTO_INCREMENT,
   `product_id` varchar(45) NOT NULL,
@@ -52,7 +52,7 @@ CREATE TABLE `products` (
   UNIQUE KEY `product_id_UNIQUE` (`product_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=49 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
 
-```bash
+
 CREATE TABLE `shopper_product_mapping` (
   `id` int NOT NULL AUTO_INCREMENT,
   `shopper_id` varchar(45) NOT NULL,
