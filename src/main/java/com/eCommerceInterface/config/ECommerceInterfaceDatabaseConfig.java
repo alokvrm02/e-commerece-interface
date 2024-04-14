@@ -1,0 +1,62 @@
+package com.eCommerceInterface.config;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.boot.jdbc.DataSourceBuilder;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
+import org.springframework.core.env.Environment;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.orm.jpa.JpaTransactionManager;
+import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
+import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
+
+import javax.sql.DataSource;
+import java.beans.ConstructorProperties;
+import java.util.HashMap;
+
+@Configuration
+@EnableTransactionManagement
+@EnableJpaRepositories(
+        basePackages = "com.eCommerceInterface.repository",
+        entityManagerFactoryRef = "eCommerceInterfaceEntityManager",
+        transactionManagerRef = "eCommerceInterfaceTransactionManager"
+)
+public class ECommerceInterfaceDatabaseConfig {
+
+    @Autowired
+    Environment env;
+
+    @Primary
+    @Bean
+    @Qualifier("eCommerceInterfaceDataSource")
+    @ConfigurationProperties(prefix = "spring.datasource")
+    public DataSource eCommerceInterfaceDataSource(){
+        return DataSourceBuilder.create().build();
+    }
+
+    @Bean
+    public LocalContainerEntityManagerFactoryBean eCommerceInterfaceEntityManager(){
+        LocalContainerEntityManagerFactoryBean em = new LocalContainerEntityManagerFactoryBean();
+        em.setDataSource(eCommerceInterfaceDataSource());
+        em.setPackagesToScan("com.eCommerceInterface.repository.model");
+        HibernateJpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
+        em.setJpaVendorAdapter(vendorAdapter);
+        HashMap<String,Object> properties = new HashMap<>();
+        properties.put("hibernate.dialect",env.getProperty("hibernate.dialect"));
+        em.setJpaPropertyMap(properties);
+        return em;
+    }
+
+    @Bean(value = "eCommerceInterfaceTransactionManager")
+    public PlatformTransactionManager eCommerceInterfaceTransactionManager(){
+        JpaTransactionManager transactionManager = new JpaTransactionManager();
+        transactionManager.setEntityManagerFactory(eCommerceInterfaceEntityManager().getObject());
+        return transactionManager;
+    }
+
+}

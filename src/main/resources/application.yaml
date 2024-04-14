@@ -1,0 +1,17 @@
+server:
+  port: 8080
+  servlet:
+    context-path: /v1
+spring:
+  datasource:
+    jdbc-url: jdbc:mysql://127.0.0.1:3306/e_commerce_interface
+    username: root
+    password: root
+    driver-class-name: com.mysql.cj.jdbc.Driver
+hibernate:
+  dialect: org.hibernate.dialect.MySQL8Dialect
+caffeine-cache:
+  shopper-cache:
+    name: shopperCache
+    expiry-in-minutes: 15
+    maximum-size: 10000
