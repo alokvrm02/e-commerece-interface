@@ -10,6 +10,7 @@ import javax.validation.constraints.NotNull;
 @NoArgsConstructor
 @SuperBuilder
 public class Product {
+    int id;
     @NotNull(message = "productId cannot be null")
     String productId;
     @NotNull(message = "category cannot be null")

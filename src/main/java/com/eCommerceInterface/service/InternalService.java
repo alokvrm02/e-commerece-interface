@@ -12,6 +12,7 @@ import com.eCommerceInterface.repository.model.Products;
 import com.eCommerceInterface.repository.model.ShopperProductMapping;
 import com.github.benmanes.caffeine.cache.Cache;
 import lombok.extern.slf4j.Slf4j;
+import org.modelmapper.ModelMapper;
 import org.slf4j.ILoggerFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,11 +35,17 @@ public class InternalService {
     ProductRelevancyRepository productRelevancyRepository;
 
     private static final Logger logger = LoggerFactory.getLogger(InternalService.class);
+    private final ModelMapper modelMapper;
+
+    @Autowired
+    public InternalService(ModelMapper modelMapper) {
+        this.modelMapper = modelMapper;
+    }
 
     public void saveProduct(ProductsRequest productsRequest) throws Exception{
         try{
             List<Product> products = productsRequest.getProducts();
-            products.forEach(product -> productRepository.save(Products.from(product)));
+            products.forEach(product -> productRepository.save(modelMapper.map(product,Products.class)));
         }catch (DataIntegrityViolationException dataIntegrityViolationException){
             logger.error("Error occurred while saving Data : {}",dataIntegrityViolationException.getMessage());
             throw new RuntimeException("Failed to save product. Product with same id already exist.");

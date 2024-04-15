@@ -22,41 +22,17 @@ import java.util.HashMap;
 @Configuration
 @EnableTransactionManagement
 @EnableJpaRepositories(
-        basePackages = "com.eCommerceInterface.repository",
-        entityManagerFactoryRef = "eCommerceInterfaceEntityManager",
-        transactionManagerRef = "eCommerceInterfaceTransactionManager"
+        basePackages = "com.eCommerceInterface.repository"
 )
 public class ECommerceInterfaceDatabaseConfig {
 
-    @Autowired
-    Environment env;
-
     @Primary
     @Bean
-    @Qualifier("eCommerceInterfaceDataSource")
     @ConfigurationProperties(prefix = "spring.datasource")
     public DataSource eCommerceInterfaceDataSource(){
         return DataSourceBuilder.create().build();
     }
 
-    @Bean
-    public LocalContainerEntityManagerFactoryBean eCommerceInterfaceEntityManager(){
-        LocalContainerEntityManagerFactoryBean em = new LocalContainerEntityManagerFactoryBean();
-        em.setDataSource(eCommerceInterfaceDataSource());
-        em.setPackagesToScan("com.eCommerceInterface.repository.model");
-        HibernateJpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
-        em.setJpaVendorAdapter(vendorAdapter);
-        HashMap<String,Object> properties = new HashMap<>();
-        properties.put("hibernate.dialect",env.getProperty("hibernate.dialect"));
-        em.setJpaPropertyMap(properties);
-        return em;
-    }
 
-    @Bean(value = "eCommerceInterfaceTransactionManager")
-    public PlatformTransactionManager eCommerceInterfaceTransactionManager(){
-        JpaTransactionManager transactionManager = new JpaTransactionManager();
-        transactionManager.setEntityManagerFactory(eCommerceInterfaceEntityManager().getObject());
-        return transactionManager;
-    }
 
 }
